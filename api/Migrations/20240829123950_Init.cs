@@ -26,18 +26,17 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContactInformation",
+                name: "Directors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    DirectorId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContactInformation", x => x.Id);
+                    table.PrimaryKey("PK_Directors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,22 +53,22 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Directors",
+                name: "ContactInformation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
-                    DateOfBirth = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    ContactInformationId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    DirectorId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Directors", x => x.Id);
+                    table.PrimaryKey("PK_ContactInformation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Directors_ContactInformation_ContactInformationId",
-                        column: x => x.ContactInformationId,
-                        principalTable: "ContactInformation",
+                        name: "FK_ContactInformation_Directors_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Directors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -151,9 +150,10 @@ namespace Api.Migrations
                 column: "MoviesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Directors_ContactInformationId",
-                table: "Directors",
-                column: "ContactInformationId");
+                name: "IX_ContactInformation_DirectorId",
+                table: "ContactInformation",
+                column: "DirectorId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GenreMovie_MoviesId",
@@ -173,6 +173,9 @@ namespace Api.Migrations
                 name: "ActorMovie");
 
             migrationBuilder.DropTable(
+                name: "ContactInformation");
+
+            migrationBuilder.DropTable(
                 name: "GenreMovie");
 
             migrationBuilder.DropTable(
@@ -186,9 +189,6 @@ namespace Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Directors");
-
-            migrationBuilder.DropTable(
-                name: "ContactInformation");
         }
     }
 }

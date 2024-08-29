@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240827064506_Init")]
+    [Migration("20240829123950_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -71,6 +71,9 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DirectorId")
+                        .IsUnique();
+
                     b.ToTable("ContactInformation");
                 });
 
@@ -78,9 +81,6 @@ namespace Api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ContactInformationId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateOnly>("DateOfBirth")
@@ -92,8 +92,6 @@ namespace Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContactInformationId");
 
                     b.ToTable("Directors");
                 });
@@ -175,15 +173,13 @@ namespace Api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Models.Director", b =>
+            modelBuilder.Entity("Api.Models.ContactInformation", b =>
                 {
-                    b.HasOne("Api.Models.ContactInformation", "ContactInformation")
-                        .WithMany()
-                        .HasForeignKey("ContactInformationId")
+                    b.HasOne("Api.Models.Director", null)
+                        .WithOne("ContactInformation")
+                        .HasForeignKey("Api.Models.ContactInformation", "DirectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ContactInformation");
                 });
 
             modelBuilder.Entity("Api.Models.Movie", b =>
@@ -214,6 +210,8 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.Director", b =>
                 {
+                    b.Navigation("ContactInformation");
+
                     b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
