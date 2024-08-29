@@ -1,7 +1,8 @@
-using Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Api.Models;
 
 namespace Api.Data;
+
 public class ApiDbContext(DbContextOptions<ApiDbContext> options) : DbContext(options) {
     public DbSet<Movie> Movies { get; set; }
 

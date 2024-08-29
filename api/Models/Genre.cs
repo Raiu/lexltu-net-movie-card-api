@@ -17,6 +17,16 @@ public class Genre {
     public ICollection<Movie> Movies { get; set; }
 }
 
+public record GenreDto {
+
+    [Key]
+    public int Id { get; set; }
+
+    [Required]
+    [StringLength(32, MinimumLength = 3)]
+    public string Name { get; set; }
+}
+
 public class GenreResponseDto {
     
     [Key]

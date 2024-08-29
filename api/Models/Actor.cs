@@ -4,8 +4,8 @@ namespace Api.Models;
 
 #nullable disable
 
-public class Director {
-
+public class Actor
+{
     [Key]
     public int Id { get; set; }
 
@@ -16,17 +16,12 @@ public class Director {
     [DataType(DataType.Date)]
     public DateOnly DateOfBirth { get; set; }
 
-    // Contact Information
-    public int ContactInformationId { get; set; }
-
-    public required ContactInformation ContactInformation { get; set; }
-
     // Movie
     public ICollection<Movie> Movies { get; set; }
 }
 
-public class DirectorResponseDto {
-    
+public class ActorDto
+{
     [Key]
     public int Id { get; set; }
 
@@ -36,10 +31,27 @@ public class DirectorResponseDto {
 
     [DataType(DataType.Date)]
     public DateOnly DateOfBirth { get; set; }
+}
 
-    [EmailAddress]
-    public string Email { get; set; }
+public class ActorCreateDto
+{
+    [Required]
+    [StringLength(64, MinimumLength = 3)]
+    public string Name { get; set; }
 
-    [Phone]
-    public string PhoneNumber { get; set; }
+    [DataType(DataType.Date)]
+    public DateOnly DateOfBirth { get; set; }
+}
+
+public class ActorResponseDto
+{
+    [Key]
+    public int Id { get; set; }
+
+    [Required]
+    [StringLength(64, MinimumLength = 3)]
+    public string Name { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateOnly DateOfBirth { get; set; }
 }
