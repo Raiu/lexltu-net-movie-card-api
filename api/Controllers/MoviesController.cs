@@ -4,49 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public record ReadMoviesParameters
-{
-    public MovieSearchParameters? Search { get; init; }
-    public MovieSortingParameters? Sorting { get; init; }
-}
-
-public record MovieSearchParameters
-{
-    public string? Title { get; set; }
-    public string? Genre { get; set; }
-    public string? ActorName { get; init; }
-    public string? DirectorName { get; init; }
-    public DateOnly? ReleaseDate { get; init; }
-}
-
-public record MovieSortingParameters
-{
-    public IEnumerable<MovieSorting>? MovieSortings { get; init; }
-}
-
-public record MovieSorting
-{
-    public MovieSortingField Field { get; init; }
-    public MovieSortingOrder? Order { get; init; }
-}
-
-public enum MovieSortingField
-{
-    Title,
-    ReleaseDate,
-    Rating,
-}
-
-public enum MovieSortingOrder
-{
-    Ascending,
-    Descending,
-    Newest,
-    Oldest,
-    Lowest,
-    Highest,
-}
-
 [Route("api/[controller]")]
 [ApiController]
 public class MoviesController(IMovieService movieService) : ControllerBase
@@ -136,5 +93,18 @@ public class MoviesController(IMovieService movieService) : ControllerBase
             return NotFound();
 
         return NoContent();
+    }
+
+    [HttpPost("{id}/actors")]
+    public async Task<ActionResult<MovieDto>> AddActorToMovie(
+        int id,
+        ICollection<ActorDto> dtos
+    )
+    {
+        var result = await _ms.AddActorsToMovieAsync(id, dtos);
+        if (!result)
+            return NotFound();
+
+        return CreatedAtAction(nameof(ReadMovieDetails), new { id = id });
     }
 }

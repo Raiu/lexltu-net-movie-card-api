@@ -131,4 +131,26 @@ public class MovieService(ApiDbContext context, IMapper mapper) : IMovieService
 
         return true;
     }
+
+    public async Task<bool> AddActorsToMovieAsync(int id, ICollection<ActorDto> dtos)
+    {
+        var movie = await _db.Movies.FindAsync(id);
+
+        if (movie == null)
+            return false;
+
+        foreach (var dto in dtos)
+        {
+            var actor = await _db.Actors.FindAsync(dto.Id);
+            if (actor == null)
+            {
+                actor = _am.Map<Actor>(dto);
+                _db.Actors.Add(actor);
+            }
+            movie.Actors.Add(actor);
+        }
+
+        await _db.SaveChangesAsync();
+        return true;
+    }
 }

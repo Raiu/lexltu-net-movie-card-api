@@ -22,4 +22,5 @@ public interface IMovieService
     Task<MovieResDetailsDto?> UpdateAsync(int id, MovieUpdateDto dto);
 
     Task<bool> DeleteAsync(int id);
+    Task<bool> AddActorsToMovieAsync(int id, ICollection<ActorDto> dtos);
 }
