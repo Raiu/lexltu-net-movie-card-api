@@ -1,4 +1,6 @@
+using Api.Controllers;
 using Api.Data;
+using Api.Extensions;
 using Api.Interfaces;
 using Api.Models;
 using AutoMapper;
@@ -34,9 +36,19 @@ public class MovieService(ApiDbContext context, IMapper mapper) : IMovieService
     /// This C# function asynchronously retrieves all movie resources as a collection of MovieResDto
     /// objects.
     /// </summary>
-    public async Task<IEnumerable<MovieResDto>> GetAllAsync()
+    public async Task<IEnumerable<MovieResDto>> GetAllAsync(
+        ReadMoviesParameters? parameters,
+        bool IncludeDirector,
+        bool IncludeActors,
+        bool IncludeGenres
+    )
     {
-        return await _am.ProjectTo<MovieResDto>(_db.Movies).ToListAsync();
+        var query = _db.Movies.AsQueryable();
+
+        query = query.FilterMovieNonGeneric(parameters?.Search);
+        query = query.SortMovieNonGeneric(parameters?.Sorting);
+
+        return await _am.ProjectTo<MovieResDto>(query).ToListAsync();
     }
 
     /// <summary>

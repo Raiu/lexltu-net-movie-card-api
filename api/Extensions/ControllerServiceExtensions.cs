@@ -5,7 +5,9 @@ namespace Api.Extensions;
 
 public static class ControllerServiceExtensions
 {
-    public static IServiceCollection AddControllerServices(this IServiceCollection services)
+    public static IServiceCollection AddControllerServices(
+        this IServiceCollection services
+    )
     {
         services.AddScoped<IActorService, ActorService>();
         services.AddScoped<IDirectorService, DirectorService>();

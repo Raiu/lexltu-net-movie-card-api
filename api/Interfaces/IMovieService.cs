@@ -1,3 +1,4 @@
+using Api.Controllers;
 using Api.Models;
 
 namespace Api.Interfaces;
@@ -6,7 +7,12 @@ public interface IMovieService
 {
     Task<Movie> CreateAsync(MovieCreateDto dto);
 
-    Task<IEnumerable<MovieResDto>> GetAllAsync();
+    Task<IEnumerable<MovieResDto>> GetAllAsync(
+        ReadMoviesParameters? parameters,
+        bool IncludeDirector,
+        bool IncludeActors,
+        bool IncludeGenres
+    );
 
     Task<MovieDto> GetByIdAsync(int id);
 

@@ -4,6 +4,49 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
+public record ReadMoviesParameters
+{
+    public MovieSearchParameters? Search { get; init; }
+    public MovieSortingParameters? Sorting { get; init; }
+}
+
+public record MovieSearchParameters
+{
+    public string? Title { get; set; }
+    public string? Genre { get; set; }
+    public string? ActorName { get; init; }
+    public string? DirectorName { get; init; }
+    public DateOnly? ReleaseDate { get; init; }
+}
+
+public record MovieSortingParameters
+{
+    public IEnumerable<MovieSorting>? MovieSortings { get; init; }
+}
+
+public record MovieSorting
+{
+    public MovieSortingField Field { get; init; }
+    public MovieSortingOrder? Order { get; init; }
+}
+
+public enum MovieSortingField
+{
+    Title,
+    ReleaseDate,
+    Rating,
+}
+
+public enum MovieSortingOrder
+{
+    Ascending,
+    Descending,
+    Newest,
+    Oldest,
+    Lowest,
+    Highest,
+}
+
 [Route("api/[controller]")]
 [ApiController]
 public class MoviesController(IMovieService movieService) : ControllerBase
@@ -22,8 +65,22 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     /* Read all
      ***********/
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MovieResDto>>> ReadMovies() =>
-        Ok(await _ms.GetAllAsync());
+    public async Task<ActionResult<IEnumerable<MovieResDto>>> ReadMovies(
+        [FromQuery] ReadMoviesParameters? parameters,
+        [FromQuery] bool IncludeDirector = true,
+        [FromQuery] bool IncludeActors = true,
+        [FromQuery] bool IncludeGenres = true
+    )
+    {
+        return Ok(
+            await _ms.GetAllAsync(
+                parameters,
+                IncludeActors,
+                IncludeDirector,
+                IncludeGenres
+            )
+        );
+    }
 
     /* Read by Id
      *************/
