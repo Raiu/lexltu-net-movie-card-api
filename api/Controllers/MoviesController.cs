@@ -1,5 +1,6 @@
 using Api.Interfaces;
 using Api.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -93,6 +94,28 @@ public class MoviesController(IMovieService movieService) : ControllerBase
             return NotFound();
 
         return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<ActionResult<MovieDto>> PatchMovie(
+        int id,
+        [FromBody] JsonPatchDocument patchDocument
+    )
+    {
+        if (patchDocument == null)
+            return BadRequest(ModelState);
+
+        var movie = await _ms.GetByIdAsync<Movie>(id);
+
+        if (movie == null)
+            return NotFound();
+
+        patchDocument.ApplyTo(movie);
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        await _ms.UpdateAsync(id, movie);
     }
 
     [HttpPost("{id}/actors")]

@@ -5,7 +5,12 @@ namespace Api.Models;
 
 #nullable disable
 
-public class Movie
+public interface IMovieId
+{
+    int Id { get; set; }
+}
+
+public class Movie : IMovieId
 {
     [Key]
     public int Id { get; set; }
@@ -35,7 +40,7 @@ public class Movie
     public ICollection<Genre> Genres { get; set; }
 }
 
-public record MovieDto : IDtoId
+public record MovieDto : IMovieId, IDtoId
 {
     public int Id { get; set; }
 
@@ -46,7 +51,7 @@ public record MovieDto : IDtoId
     public DateOnly ReleaseDate { get; set; }
 }
 
-public record MovieResDto : IDtoId
+public record MovieResDto : IMovieId, IDtoId
 {
     public int Id { get; set; }
 
@@ -66,7 +71,7 @@ public record MovieResDetailsDto : MovieResDto
     public List<GenreResponseDto> Genres { get; set; }
 }
 
-public record MovieReqDto
+public record MovieReqDto : IMovieId
 {
     [Key]
     public int Id { get; set; }
@@ -91,7 +96,7 @@ public record MovieReqDto
     public List<int> GenresId { get; set; }
 }
 
-public record MovieCreateDto : IDtoId
+public record MovieCreateDto : IMovieId, IDtoId
 {
     [Key]
     public int Id { get; set; }
@@ -118,7 +123,7 @@ public record MovieCreateDto : IDtoId
     public ICollection<GenreDto> Genres { get; set; }
 }
 
-public record MovieUpdateDto : IDtoId
+public record MovieUpdateDto : IMovieId, IDtoId
 {
     [Key]
     public int Id { get; set; }

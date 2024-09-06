@@ -4,6 +4,7 @@ using Api.Extensions;
 using Api.Interfaces;
 using Api.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services;
@@ -64,7 +65,7 @@ public class MovieService(ApiDbContext context, IMapper mapper) : IMovieService
     /// <param name="id">The `id` parameter is an integer value that represents the unique identifier of
     /// the item you want to retrieve.</param>
     public async Task<T> GetByIdAsync<T>(int id)
-        where T : IDtoId =>
+        where T : IMovieId =>
         await _am.ProjectTo<T>(_db.Movies).Where(x => x.Id == id).FirstAsync();
 
     /// <summary>
@@ -146,11 +147,27 @@ public class MovieService(ApiDbContext context, IMapper mapper) : IMovieService
             {
                 actor = _am.Map<Actor>(dto);
                 _db.Actors.Add(actor);
+                await _db.SaveChangesAsync();
             }
             movie.Actors.Add(actor);
         }
 
         await _db.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<bool> PartialAsync(int id, JsonPatchDocument patchDocument)
+    {
+        var movie = await _db.Movies.FindAsync(id);
+
+        if (movie == null)
+            return NotFound();
+
+        patchDocument.ApplyTo(movie);
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        await _ms.UpdateAsync(id, movie);
     }
 }

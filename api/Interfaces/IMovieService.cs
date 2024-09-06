@@ -17,7 +17,7 @@ public interface IMovieService
     Task<MovieDto> GetByIdAsync(int id);
 
     Task<T> GetByIdAsync<T>(int id)
-        where T : IDtoId;
+        where T : IMovieId;
 
     Task<MovieResDetailsDto?> UpdateAsync(int id, MovieUpdateDto dto);
 
