@@ -1,5 +1,6 @@
 using Api.Controllers;
 using Api.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Api.Interfaces;
 
@@ -22,5 +23,8 @@ public interface IMovieService
     Task<MovieResDetailsDto?> UpdateAsync(int id, MovieUpdateDto dto);
 
     Task<bool> DeleteAsync(int id);
+
     Task<bool> AddActorsToMovieAsync(int id, ICollection<ActorDto> dtos);
+
+    Task<T> PartialAsync<T>(int id, JsonPatchDocument patchDocument);
 }

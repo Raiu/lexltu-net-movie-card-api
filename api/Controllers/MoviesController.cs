@@ -104,18 +104,7 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     {
         if (patchDocument == null)
             return BadRequest(ModelState);
-
-        var movie = await _ms.GetByIdAsync<Movie>(id);
-
-        if (movie == null)
-            return NotFound();
-
-        patchDocument.ApplyTo(movie);
-
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        await _ms.UpdateAsync(id, movie);
+        return Ok(await _ms.PartialAsync(id, patchDocument));
     }
 
     [HttpPost("{id}/actors")]
