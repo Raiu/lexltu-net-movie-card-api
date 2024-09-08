@@ -23,10 +23,9 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 });
 
 builder.Services.AddControllerServices();
+builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(Program));
-
-builder.Services.AddControllers();
 
 builder.Services.AddOpenApiDocument();
 builder.Services.AddEndpointsApiExplorer();

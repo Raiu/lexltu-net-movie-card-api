@@ -28,8 +28,7 @@ public class ActorsController(IActorService actorService) : ControllerBase
     /* Read by Id
      *************/
     [HttpGet("{id}")]
-    public async Task<ActionResult<ActorDto>> ReadActor(int id) =>
-        Ok(await _as.GetByIdAsync(id));
+    public async Task<ActionResult<ActorDto>> ReadActor(int id) => Ok(await _as.GetByIdAsync(id));
 
     /* Update
      ***********/

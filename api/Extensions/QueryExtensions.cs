@@ -38,9 +38,7 @@ public static class QueryExtensions
                     break;
                 case nameof(searchParameters.DirectorName):
 
-                    query = query.Where(m =>
-                        m.Director.Name.ToLower().Contains((string)value)
-                    );
+                    query = query.Where(m => m.Director.Name.ToLower().Contains((string)value));
                     break;
                 case nameof(MovieSearchParameters.ActorName):
 
@@ -60,8 +58,10 @@ public static class QueryExtensions
 
         return query;
     }
+}
 
-    /* public static IQueryable<T> Filter<T>(this IQueryable<T> query, object searchParams)
+
+/* public static IQueryable<T> Filter<T>(this IQueryable<T> query, object searchParams)
     {
         if (searchParams == null)
             return query;
@@ -73,7 +73,7 @@ public static class QueryExtensions
 
             if (value == null)
                 continue;
-            
+
 
 
 
@@ -89,4 +89,3 @@ public static class QueryExtensions
     {
 
     } */
-}

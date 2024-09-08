@@ -31,8 +31,7 @@ public class DirectorService(ApiDbContext context, IMapper mapper) : IDirectorSe
     /// This C# function asynchronously retrieves all director data and returns it as a collection of
     /// DirectorDto objects.
     /// </summary>
-    public async Task<IEnumerable<DirectorDto>> GetAllAsync() =>
-        await GetAllAsync<DirectorDto>();
+    public async Task<IEnumerable<DirectorDto>> GetAllAsync() => await GetAllAsync<DirectorDto>();
 
     /// <summary>
     /// This C# function asynchronously retrieves all items of type T.
@@ -47,8 +46,7 @@ public class DirectorService(ApiDbContext context, IMapper mapper) : IDirectorSe
     /// represents the unique identifier of the director whose information you want to retrieve
     /// asynchronously.</param>
     public async Task<DirectorDto> GetByIdAsync(int id) =>
-        await _am.ProjectTo<DirectorDto>(_db.Directors.Where(x => x.Id == id))
-            .FirstAsync();
+        await _am.ProjectTo<DirectorDto>(_db.Directors.Where(x => x.Id == id)).FirstAsync();
 
     /// <summary>
     /// This C# function asynchronously updates a DirectorDto object with the specified ID.

@@ -1,12 +1,21 @@
-using Api.Controllers;
 using Api.Models;
-using Microsoft.AspNetCore.JsonPatch;
+using Api.Services;
 
 namespace Api.Interfaces;
 
-public interface IMovieService
+public interface IMovieService : IServiceBase<Movie, MovieDto>
 {
-    Task<Movie> CreateAsync(MovieCreateDto dto);
+    Task<IEnumerable<MovieResDto>> GetAllAsync(
+        ReadMoviesParameters? parameters,
+        bool IncludeDirector,
+        bool IncludeActors,
+        bool IncludeGenres
+    );
+
+    Task<bool> AddActorsToMovieAsync(int id, ICollection<ActorDto> dtos);
+}
+
+/* Task<Movie> CreateAsync(MovieCreateDto dto);
 
     Task<IEnumerable<MovieResDto>> GetAllAsync(
         ReadMoviesParameters? parameters,
@@ -26,5 +35,4 @@ public interface IMovieService
 
     Task<bool> AddActorsToMovieAsync(int id, ICollection<ActorDto> dtos);
 
-    Task<T> PartialAsync<T>(int id, JsonPatchDocument patchDocument);
-}
+    Task<T> PartialAsync<T>(int id, JsonPatchDocument patchDocument); */

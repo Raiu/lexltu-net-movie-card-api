@@ -31,8 +31,7 @@ public class ActorService(ApiDbContext context, IMapper mapper) : IActorService
     /// This C# function asynchronously retrieves all actors and returns them as a collection of
     /// ActorDto objects.
     /// </summary>
-    public async Task<IEnumerable<ActorDto>> GetAllAsync() =>
-        await GetAllAsync<ActorDto>();
+    public async Task<IEnumerable<ActorDto>> GetAllAsync() => await GetAllAsync<ActorDto>();
 
     /// <summary>
     /// This C# function asynchronously retrieves all items of type T.

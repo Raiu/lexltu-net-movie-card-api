@@ -33,11 +33,7 @@ public class ApiDbContext(DbContextOptions<ApiDbContext> options) : DbContext(op
             .Select(e => e.Entity);
         foreach (var entity in entities)
         {
-            if (
-                Actors.Any(a =>
-                    a.Name == entity.Name && a.DateOfBirth == entity.DateOfBirth
-                )
-            )
+            if (Actors.Any(a => a.Name == entity.Name && a.DateOfBirth == entity.DateOfBirth))
             {
                 throw new DbUpdateException("Duplicate Actor");
             }

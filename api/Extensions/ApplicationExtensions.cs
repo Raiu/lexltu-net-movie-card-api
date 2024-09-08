@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
 
-public static class ApplicationExtensions {
-
-    public static async Task SeedDataAsync (this IApplicationBuilder builder) {
+public static class ApplicationExtensions
+{
+    public static async Task SeedDataAsync(this IApplicationBuilder builder)
+    {
         using var scope = builder.ApplicationServices.CreateScope();
         var serviceProvider = scope.ServiceProvider;
         var context = serviceProvider.GetRequiredService<ApiDbContext>();
@@ -13,10 +14,12 @@ public static class ApplicationExtensions {
         await context.Database.EnsureDeletedAsync();
         await context.Database.MigrateAsync();
 
-        try {
+        try
+        {
             await SeedData.InitAsync(context);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Console.WriteLine(e.Message);
             throw;
         }

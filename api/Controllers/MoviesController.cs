@@ -28,17 +28,7 @@ public class MoviesController(IMovieService movieService) : ControllerBase
         [FromQuery] bool IncludeDirector = true,
         [FromQuery] bool IncludeActors = true,
         [FromQuery] bool IncludeGenres = true
-    )
-    {
-        return Ok(
-            await _ms.GetAllAsync(
-                parameters,
-                IncludeActors,
-                IncludeDirector,
-                IncludeGenres
-            )
-        );
-    }
+    ) => Ok(await _ms.GetAllAsync(parameters, IncludeActors, IncludeDirector, IncludeGenres));
 
     /* Read by Id
      *************/
@@ -69,10 +59,7 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     /* Update
      ***********/
     [HttpPut("{id}")]
-    public async Task<ActionResult<MovieResDetailsDto>> UpdateMovie(
-        int id,
-        MovieUpdateDto dto
-    )
+    public async Task<ActionResult<MovieResDetailsDto>> UpdateMovie(int id, MovieUpdateDto dto)
     {
         if (id != dto.Id)
             return BadRequest();
@@ -104,14 +91,11 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     {
         if (patchDocument == null)
             return BadRequest(ModelState);
-        return Ok(await _ms.PartialAsync(id, patchDocument));
+        return Ok(await _ms.PartialAsync<MovieDto>(id, patchDocument));
     }
 
     [HttpPost("{id}/actors")]
-    public async Task<ActionResult<MovieDto>> AddActorToMovie(
-        int id,
-        ICollection<ActorDto> dtos
-    )
+    public async Task<ActionResult<MovieDto>> AddActorToMovie(int id, ICollection<ActorDto> dtos)
     {
         var result = await _ms.AddActorsToMovieAsync(id, dtos);
         if (!result)

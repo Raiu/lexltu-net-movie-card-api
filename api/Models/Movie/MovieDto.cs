@@ -1,3 +1,5 @@
+namespace Api.Models;
+
 public record ReadMoviesParameters
 {
     public MovieSearchParameters? Search { get; init; }
