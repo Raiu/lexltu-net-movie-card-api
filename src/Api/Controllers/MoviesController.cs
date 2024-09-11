@@ -1,5 +1,6 @@
 using Api.Interfaces;
 using Api.Models;
+using Api.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     /* Create
      ***********/
     [HttpPost]
-    public async Task<ActionResult<MovieResDetailsDto>> CreateMovie(MovieCreateDto dto)
+    public async Task<ActionResult<MovieDetailsDto>> CreateMovie(MovieCreateDto dto)
     {
         var movie = await _ms.CreateAsync(dto);
         return CreatedAtAction(nameof(ReadMovieDetails), new { id = movie.Id }, movie);
@@ -46,20 +47,13 @@ public class MoviesController(IMovieService movieService) : ControllerBase
     /* Read by Id with Details
      **************************/
     [HttpGet("{id}/details")]
-    public async Task<ActionResult<MovieResDetailsDto>> ReadMovieDetails(int id)
-    {
-        var dto = await _ms.GetByIdAsync<MovieResDetailsDto>(id);
-
-        if (dto == null)
-            return NotFound();
-
-        return Ok(dto);
-    }
+    public async Task<ActionResult<MovieDetailsDto>> ReadMovieDetails(int id) =>
+        Ok(await _ms.GetByIdAsync<MovieDetailsDto>(id));
 
     /* Update
      ***********/
     [HttpPut("{id}")]
-    public async Task<ActionResult<MovieResDetailsDto>> UpdateMovie(int id, MovieUpdateDto dto)
+    public async Task<ActionResult<MovieDetailsDto>> UpdateMovie(int id, MovieUpdateDto dto)
     {
         if (id != dto.Id)
             return BadRequest();

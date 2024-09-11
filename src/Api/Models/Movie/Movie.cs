@@ -5,12 +5,7 @@ namespace Api.Models;
 
 #nullable disable
 
-public interface IMovieId
-{
-    int Id { get; set; }
-}
-
-public class Movie : IMovieId
+public class Movie : IEntity
 {
     [Key]
     public int Id { get; set; }
@@ -40,7 +35,7 @@ public class Movie : IMovieId
     public ICollection<Genre> Genres { get; set; }
 }
 
-public record MovieDto : IMovieId, IDtoId
+public record MovieDto : IEntity, IDtoId
 {
     public int Id { get; set; }
 
@@ -51,7 +46,7 @@ public record MovieDto : IMovieId, IDtoId
     public DateOnly ReleaseDate { get; set; }
 }
 
-public record MovieResDto : IMovieId, IDtoId
+public record MovieResDto : IEntity, IDtoId
 {
     public int Id { get; set; }
 
@@ -62,7 +57,7 @@ public record MovieResDto : IMovieId, IDtoId
     public DateOnly ReleaseDate { get; set; }
 }
 
-public record MovieResDetailsDto : MovieResDto
+public record MovieDetailsDto : MovieResDto
 {
     public DirectorDto Director { get; set; }
 
@@ -71,7 +66,7 @@ public record MovieResDetailsDto : MovieResDto
     public List<GenreResponseDto> Genres { get; set; }
 }
 
-public record MovieReqDto : IMovieId
+public record MovieReqDto : IEntity
 {
     [Key]
     public int Id { get; set; }
@@ -96,7 +91,7 @@ public record MovieReqDto : IMovieId
     public List<int> GenresId { get; set; }
 }
 
-public record MovieCreateDto : IMovieId, IDtoId
+public record MovieCreateDto : IEntity, IDtoId
 {
     [Key]
     public int Id { get; set; }
@@ -123,7 +118,7 @@ public record MovieCreateDto : IMovieId, IDtoId
     public ICollection<GenreDto> Genres { get; set; }
 }
 
-public record MovieUpdateDto : IMovieId, IDtoId
+public record MovieUpdateDto : IEntity, IDtoId
 {
     [Key]
     public int Id { get; set; }

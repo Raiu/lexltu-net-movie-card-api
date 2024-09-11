@@ -9,7 +9,7 @@ public class MappingProfile : Profile
     {
         CreateMap<Movie, Movie>().ReverseMap();
         CreateMap<Movie, MovieResDto>();
-        CreateMap<Movie, MovieResDetailsDto>()
+        CreateMap<Movie, MovieDetailsDto>()
             .ForMember(dest => dest.Director, opt => opt.MapFrom(src => src.Director))
             .ForMember(dest => dest.Actors, opt => opt.MapFrom(src => src.Actors))
             .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres));

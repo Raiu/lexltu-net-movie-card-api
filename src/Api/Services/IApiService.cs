@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace Api.Services;
 
-public interface IServiceBase<TEntity, TDto>
+public interface IApiService<TEntity, TDto>
     where TEntity : class
 {
     Task<TDto> CreateAsync<TCreateDto>(TCreateDto dto);

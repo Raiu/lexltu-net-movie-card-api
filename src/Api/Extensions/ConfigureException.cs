@@ -2,6 +2,7 @@ using Api.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 
 namespace Api.Extensions;
 
@@ -18,14 +19,16 @@ public static class ConfigureException
                     var problemDetailsFactory =
                         application.Services.GetRequiredService<ProblemDetailsFactory>();
 
-                    ProblemDetails problemDetails;
-                    int statusCode;
-
-                    (problemDetails, statusCode) = handleException(
+                    var isHandled = handleException(
                         context,
                         handler,
-                        problemDetailsFactory
+                        problemDetailsFactory,
+                        out ProblemDetails problemDetails,
+                        out int statusCode
                     );
+
+                    if (!isHandled)
+                        throw handler.Error;
 
                     context.Response.StatusCode = statusCode;
                     await context.Response.WriteAsJsonAsync(problemDetails);
@@ -34,7 +37,41 @@ public static class ConfigureException
         );
     }
 
-    private static (ProblemDetails problemDetails, int statusCode) handleException(
+    private static bool handleException(
+        HttpContext context,
+        IExceptionHandlerFeature handler,
+        ProblemDetailsFactory problemDetailsFactory,
+        out ProblemDetails problemDetails,
+        out int statusCode
+    )
+    {
+        switch (handler.Error)
+        {
+            case ApiException e:
+                problemDetails = problemDetailsFactory.CreateProblemDetails(
+                    context,
+                    e.StatusCode,
+                    e.Title,
+                    e.Detail
+                );
+                statusCode = e.StatusCode;
+                return true;
+
+            default:
+                problemDetails = problemDetailsFactory.CreateProblemDetails(
+                    context,
+                    StatusCodes.Status500InternalServerError,
+                    title: "Internal Server Error",
+                    detail: "An unexpected error occurred."
+                );
+                statusCode = StatusCodes.Status500InternalServerError;
+                return false;
+        }
+    }
+}
+
+
+/* private static (ProblemDetails problemDetails, int statusCode) handleException(
         HttpContext context,
         IExceptionHandlerFeature handler,
         ProblemDetailsFactory problemDetailsFactory
@@ -59,5 +96,4 @@ public static class ConfigureException
                 ),
                 StatusCodes.Status500InternalServerError
             ),
-        };
-}
+        }; */
